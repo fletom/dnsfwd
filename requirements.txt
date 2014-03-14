@@ -1,3 +1,5 @@
+Werkzeug==0.9.4
+dnspython==1.11.1
 gevent==1.0
 greenlet==0.4.2
 gunicorn==18.0
