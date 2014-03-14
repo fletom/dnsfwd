@@ -3,5 +3,6 @@ dnspython==1.11.1
 gevent==1.0
 greenlet==0.4.2
 gunicorn==18.0
+pymemcache==1.2
 six==1.6.1
 wsgiref==0.1.2
