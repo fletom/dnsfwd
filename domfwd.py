@@ -48,9 +48,6 @@ def lookup_fwd(domain, rdepth = 1):
 	
 	fwd_to = cname[:-len(ending)]
 	
-	if fwd_to == 'unwww' and domain.startswith('www.'):
-		fwd_to = domain[4:]
-	
 	if cache:
 		cache.set(domain, fwd_to, answer.rrset.ttl)
 	
@@ -63,6 +60,9 @@ def app(environ, start_response):
 	domain, _, port = request.host.partition(':')
 	
 	fwd_to = lookup_fwd(domain)
+	
+	if fwd_to == 'unwww' and domain.startswith('www.'):
+		fwd_to = domain[4:]
 	
 	status = '301 Moved Permanently'
 	if fwd_to is not None:
