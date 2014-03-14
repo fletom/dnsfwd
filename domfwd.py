@@ -71,6 +71,7 @@ def app(environ, start_response):
 		location = 'http://domfwd.com/#improperly_configured'
 	
 	response_headers = [
+		('Content-Length', '0'),
 		('Location', location),
 	]
 	start_response(status, response_headers)
