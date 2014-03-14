@@ -3,7 +3,7 @@ import dns.resolver
 from werkzeug.wrappers import Request
 
 resolver = dns.resolver.Resolver()
-resolver.lifetime = 0.250
+resolver.lifetime = 0.500
 
 def lookup_fwd(domain, rdepth = 1):
 	"""Look up the forwarding address for a domain."""
