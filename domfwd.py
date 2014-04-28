@@ -15,14 +15,7 @@ except socket.error:
 	cache = None
 
 
-def lookup_fwd(domain, rdepth = 1):
-	"""Look up the forwarding address for a domain."""
-	
-	if cache:
-		cached = cache.get(domain)
-		if cached is not None:
-			return cached
-	
+def lookup_cname(domain):
 	try:
 		answer = resolver.query(domain, 'CNAME', tcp = True)
 	except (
@@ -33,7 +26,19 @@ def lookup_fwd(domain, rdepth = 1):
 	):
 		return None
 	
-	cname = answer[0].to_text().rstrip('.')
+	return answer[0].to_text().rstrip('.'), answer.rrset.ttl
+
+
+def lookup_fwd(domain, rdepth = 1):
+	"""Look up the forwarding address for a domain."""
+	
+	if cache:
+		cached = cache.get(domain)
+		if cached is not None:
+			return cached
+	
+	
+	cname, ttl = lookup_cname(domain)
 	
 	ending = '.domfwd.com'
 	
@@ -49,7 +54,7 @@ def lookup_fwd(domain, rdepth = 1):
 	fwd_to = cname[:-len(ending)]
 	
 	if cache:
-		cache.set(domain, fwd_to, answer.rrset.ttl)
+		cache.set(domain, fwd_to, ttl)
 	
 	return fwd_to
 
