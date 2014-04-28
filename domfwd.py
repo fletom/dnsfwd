@@ -38,7 +38,7 @@ def lookup_fwd(domain, rdepth = 1):
 	ending = '.domfwd.com'
 	
 	if not cname.endswith(ending):
-		# It could be an intermediary CNAME that points to our CNAME, which should work but not get stuck in a loop
+		# It could be an intermediary CNAME that points to our CNAME, which should work but not get stuck in a loop.
 		
 		rdepth += 1
 		if rdepth > 3:
