@@ -40,7 +40,7 @@ def lookup_fwd(domain, rdepth = 1):
 	
 	cname, ttl = lookup_cname(domain)
 	
-	ending = '.domfwd.com'
+	ending = '.dnsfwd.com'
 	
 	if not cname.endswith(ending):
 		# It could be an intermediary CNAME that points to our CNAME, which should work but not get stuck in a loop.
@@ -73,7 +73,7 @@ def app(environ, start_response):
 	if fwd_to is not None:
 		location = 'http://' + fwd_to + (':' + port if port else '') + request.path
 	else:
-		location = 'http://domfwd.com/#improperly_configured'
+		location = 'http://dnsfwd.com/#improperly_configured'
 	
 	response_headers = [
 		('Content-Length', '0'),
