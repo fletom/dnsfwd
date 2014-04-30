@@ -4,8 +4,10 @@ import dns.resolver
 import pymemcache.client
 from werkzeug.wrappers import Request
 
+
 resolver = dns.resolver.Resolver()
 resolver.lifetime = 0.500
+
 
 # Try a local memcached, but do without if we can't connect
 cache = pymemcache.client.Client(('localhost', 11211))
@@ -15,34 +17,60 @@ except socket.error:
 	cache = None
 
 
-def lookup_cname(domain):
+def dns_lookup(domain, type):
 	try:
-		answer = resolver.query(domain, 'CNAME', tcp = True)
+		answers = resolver.query(domain, type, tcp = True)
 	except (
 		dns.resolver.NXDOMAIN,
 		dns.resolver.NoAnswer,
 		dns.resolver.NoNameservers,
 		dns.exception.Timeout
 	):
-		return None
-	
-	return answer[0].to_text().rstrip('.'), answer.rrset.ttl
+		return [], None
+	else:
+		return [a.to_text() for a in answers], answers.rrset.ttl
+
+
+def lookup_cname(domain):
+	cnames, ttl = dns_lookup(domain, 'CNAME')
+	return cnames[0].rstrip('.') if cnames else None, ttl
+
+
+def lookup_txts(domain):
+	txts, ttl = dns_lookup(domain, 'TXT')
+	return [txt.strip('"') for txt in txts], ttl
 
 
 def lookup_fwd(domain, rdepth = 1):
 	"""Look up the forwarding address for a domain."""
+	dnsfwd_record_ending = '.dnsfwd.com'
 	
 	if cache:
 		cached = cache.get(domain)
 		if cached is not None:
 			return cached
 	
-	
 	cname, ttl = lookup_cname(domain)
 	
-	ending = '.dnsfwd.com'
+	if cname is None:
+		txts, ttl = lookup_txts(domain)
+		for txt in txts:
+			# DNSFwd TXT format
+			dnsfwd_txt_prefix = 'dnsfwd '
+			if txt.lower().startswith(dnsfwd_txt_prefix):
+				cname = txt[len(dnsfwd_txt_prefix):] + dnsfwd_record_ending
+				break
+			
+			# DNSimple ALIAS format
+			dnsimple_alias_prefix = 'alias for '
+			if txt.lower().startswith(dnsimple_alias_prefix):
+				cname = txt[len(dnsimple_alias_prefix):]
+				break
 	
-	if not cname.endswith(ending):
+	if cname is None:
+		return None
+	
+	if not cname.endswith(dnsfwd_record_ending):
 		# It could be an intermediary CNAME that points to our CNAME, which should work but not get stuck in a loop.
 		
 		rdepth += 1
@@ -51,7 +79,7 @@ def lookup_fwd(domain, rdepth = 1):
 		
 		return lookup_fwd(cname, rdepth)
 	
-	fwd_to = cname[:-len(ending)]
+	fwd_to = cname[:-len(dnsfwd_record_ending)]
 	
 	if cache:
 		cache.set(domain, fwd_to, ttl)
