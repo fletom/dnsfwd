@@ -71,7 +71,7 @@ def app(environ, start_response):
 	
 	status = '301 Moved Permanently'
 	if fwd_to is not None:
-		location = 'http://' + fwd_to + (':' + port if port else '') + request.path
+		location = 'http://' + fwd_to + request.path
 	else:
 		location = 'http://dnsfwd.com/#improperly_configured'
 	
