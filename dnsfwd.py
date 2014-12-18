@@ -17,7 +17,6 @@ except socket.error:
 
 def lookup_fwd(domain, rdepth = 1):
 	"""Look up the forwarding address for a domain."""
-	dnsfwd_record_ending = '.dnsfwd.com'
 	
 	if cache:
 		cached = cache.get(domain)
@@ -30,21 +29,22 @@ def lookup_fwd(domain, rdepth = 1):
 		txts, ttl = lookup_txts(domain)
 		for txt in txts:
 			# DNSFwd TXT format
-			dnsfwd_txt_prefix = 'dnsfwd '
-			if txt.lower().startswith(dnsfwd_txt_prefix):
-				cname = txt[len(dnsfwd_txt_prefix):] + dnsfwd_record_ending
+			dnsfwd_txt = cut_prefix(txt.lower(), 'dnsfwd ') 
+			if dnsfwd_txt:
+				cname = dnsfwd_txt + '.dnsfwd.com'
 				break
 			
 			# DNSimple ALIAS format
-			dnsimple_alias_prefix = 'alias for '
-			if txt.lower().startswith(dnsimple_alias_prefix):
-				cname = txt[len(dnsimple_alias_prefix):]
+			dnsimple_alias = cut_prefix(txt.lower(), 'alias for ')
+			if dnsimple_alias:
+				cname = dnsimple_alias
 				break
 	
 	if cname is None:
 		return None
 	
-	if not cname.endswith(dnsfwd_record_ending):
+	fwd_to = cut_suffix(cname, '.dnsfwd.com')
+	if not fwd_to:
 		# It could be an intermediary CNAME that points to our CNAME, which should work but not get stuck in a loop.
 		
 		rdepth += 1
@@ -52,8 +52,6 @@ def lookup_fwd(domain, rdepth = 1):
 			return None
 		
 		return lookup_fwd(cname, rdepth)
-	
-	fwd_to = cname[:-len(dnsfwd_record_ending)]
 	
 	if cache:
 		cache.set(domain, fwd_to, ttl)
