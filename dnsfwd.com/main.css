@@ -1,0 +1,51 @@
+body {
+	background-color: #FFF;
+	font-family: 'Helvetica Neue', Helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 15px;
+	margin: 12px;
+}
+
+h1 {
+	font-size: 30px;
+}
+
+h2 {
+	font-size: 18px;
+}
+
+a {
+	text-decoration: none;
+}
+
+code {
+	margin: 0 2px;
+	padding: 0px 5px;
+	border: 1px solid #ddd;
+	background-color: #f8f8f8;
+	border-radius: 3px;
+	font-family: Consolas, 'Liberation Mono', Courier, monospace;
+	font-size: 14px;
+	white-space: nowrap;
+}
+
+#content {
+	max-width: 800px;
+}
+
+.question {
+	font-weight: normal;
+}
+
+.answer {
+	margin-left: 2em;
+}
+
+#footer {
+	font-size: 8pt;
+	color: #999;
+	max-width: 575px;
+}
+#footer a {
+	color: #666;
+}
