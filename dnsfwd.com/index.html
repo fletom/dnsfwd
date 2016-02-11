@@ -1,0 +1,104 @@
+<!DOCTYPE html> 
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'> 
+	<head>
+		<title>DNSFwd: easy redirection using only DNS</title> 
+		<meta name='keywords' content='domain, dns, redirect, 301, www, wwwizer, no-www'/> 
+		<meta name='description' content='A simple service that does all kinds of HTTP redirection goodness just based on your DNS records.'/> 
+		<style type='text/css'>
+			body {
+				background-color: #FFF;
+				font-family: 'Helvetica Neue', Helvetica, sans-serif;
+				font-weight: 300;
+				font-size: 15px;
+				margin: 12px;
+			}
+			
+			h1 {
+				font-size: 30px;
+			}
+			
+			h2 {
+				font-size: 18px;
+			}
+			
+			a {
+				text-decoration: none;
+			}
+			
+			code {
+				margin: 0 2px;
+				padding: 0px 5px;
+				border: 1px solid #ddd;
+				background-color: #f8f8f8;
+				border-radius: 3px;
+				font-family: Consolas, 'Liberation Mono', Courier, monospace;
+				font-size: 14px;
+				white-space: nowrap;
+			}
+			
+			#content {
+				max-width: 800px;
+			}
+			
+			.question {
+				font-weight: normal;
+			}
+			
+			.answer {
+				margin-left: 2em;
+			}
+			
+			#footer {
+				font-size: 8pt;
+				color: #999;
+				max-width: 575px;
+			}
+			#footer a {
+				color: #666;
+			}
+			#footer a.no-highlight {
+				color: #999;
+			}
+			
+			.twitter-share-button {
+				display: block;
+				height: 20px;
+			}
+		</style>
+		<script type='text/javascript'>
+			
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-8519921-10']);
+			_gaq.push(['_trackPageview']);
+			
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body>
+		<div id='content'>
+			<h1>DNSFwd</h1>
+			<p>A simple service that does all kinds of HTTP redirection goodness just based on your DNS records.</p>
+			<h2>Usage</h2>
+			<p>
+				The best way to use DNSFwd is with a CNAME. Add a DNS record like
+				<code>foo.bar.com CNAME baz.com.dnsfwd.com</code>
+				and all requests from foo.bar.com will be 301 redirected to baz.com.
+			</p>
+			<h2>FAQ</h2>
+			<p class='question'>How can I trust you with my web traffic?</p>
+			<p class='answer'>Well, for one thing, I'm a real person, this domain's WHOIS is my real information, and I don't want to piss anybody off. But that's pretty much it.</p>
+			<p class='answer'>Honestly, you just shouldn't use DNSFwd when security is your top priority. It can't support HTTPS anyways.</p>
+		</div>
+		<div id='footer'>
+			<p>
+				This is a <a href='http://fletcher.tomalty.com/'>fletom</a> contraption.
+				Send any feedback to fletcher [at] tomalty [d<span>o</span>t] com, or tweet to <a href='https://twitter.com/fletom'>@fletom</a>.
+			</p>
+			<p><a class='no-highlight' href='bitcoin:1U1wC3eUHeMTe4GQesWKU7jkzZuLNPZ3o'>1U1wC3eUHeMTe4GQesWKU7jkzZuLNPZ3o</a></p>
+		</div>
+	</body> 
+</html>
