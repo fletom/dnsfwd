@@ -1,20 +1,45 @@
 body {
 	background-color: #FFF;
-	font-family: 'Helvetica Neue', Helvetica, sans-serif;
-	font-weight: 300;
-	font-size: 15px;
+	font-family: 'Helvetica Neue', "Helvetica", sans-serif;
+	font-weight: 200;
+	font-size: 18px;
 	margin: 12px;
+	width: 750px;
 }
 
 h1 {
-	font-size: 30px;
+	font-size: 2em;
 }
 
 h2 {
-	font-size: 18px;
+	font-size: 1.25em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+input {
+	font-family: "Courier", monospace;
+	font-size: 1em;
+	padding: 5px;
+	outline: none;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+	width: 450px;
+}
+
+input:invalid {
+	border-color: #F00;
 }
 
 a {
+	color: #00F;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #00F;
 	text-decoration: none;
 }
 
@@ -25,20 +50,12 @@ code {
 	background-color: #f8f8f8;
 	border-radius: 3px;
 	font-family: Consolas, 'Liberation Mono', Courier, monospace;
-	font-size: 14px;
+	font-size: 0.9em;
 	white-space: nowrap;
 }
 
 #content {
 	max-width: 800px;
-}
-
-.question {
-	font-weight: normal;
-}
-
-.answer {
-	margin-left: 2em;
 }
 
 #footer {
