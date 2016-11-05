@@ -4,7 +4,7 @@ body {
 	font-weight: 200;
 	font-size: 18px;
 	margin: 12px;
-	width: 750px;
+	max-width: 750px;
 }
 
 h1 {
@@ -26,7 +26,8 @@ input {
 	outline: none;
 	border: 1px solid #CCC;
 	border-radius: 4px;
-	width: 450px;
+	width: 90%;
+	max-width: 450px;
 }
 
 input:invalid {
