@@ -2,8 +2,8 @@ import socket
 import pymemcache.client
 from werkzeug.wrappers import Request
 
-from dns import lookup_cname, lookup_txts
-from utils import cut_prefix, cut_suffix
+from utils.dns import lookup_cname, lookup_txts
+from utils.text import cut_prefix, cut_suffix
 
 
 
