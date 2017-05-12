@@ -1,4 +1,5 @@
-import socket
+import os
+
 import pymemcache.client
 from werkzeug.wrappers import Request
 
@@ -6,22 +7,16 @@ from utils.dns import lookup_cname, lookup_txts
 from utils.text import cut_prefix, cut_suffix
 
 
-
-# Try a local memcached, but do without if we can't connect
-cache = pymemcache.client.Client(('localhost', 11211))
-try:
-	cache.get('test')
-except socket.error:
-	cache = None
+cache = pymemcache.client.Client((os.getenv('MEMCACHE_HOST', 'localhost'), os.getenv('MEMCACHE_PORT', 11211)))
+cache.get('test') # make sure we're connected
 
 
 def lookup_fwd(domain, rdepth = 1):
 	"""Look up the forwarding address for a domain."""
 	
-	if cache:
-		cached = cache.get(domain)
-		if cached is not None:
-			return cached
+	cached = cache.get(domain)
+	if cached is not None:
+		return cached.decode('ascii')
 	
 	cname, ttl = lookup_cname(domain)
 	
@@ -29,7 +24,7 @@ def lookup_fwd(domain, rdepth = 1):
 		txts, ttl = lookup_txts(domain)
 		for txt in txts:
 			# DNSFwd TXT format
-			dnsfwd_txt = cut_prefix(txt.lower(), 'dnsfwd ') 
+			dnsfwd_txt = cut_prefix(txt.lower(), 'dnsfwd ')
 			if dnsfwd_txt:
 				cname = dnsfwd_txt + '.dnsfwd.com'
 				break
@@ -53,8 +48,7 @@ def lookup_fwd(domain, rdepth = 1):
 		
 		return lookup_fwd(cname, rdepth)
 	
-	if cache:
-		cache.set(domain, fwd_to, ttl)
+	cache.set(domain, fwd_to.encode('ascii'), ttl)
 	
 	return fwd_to
 
@@ -81,3 +75,9 @@ def app(environ, start_response):
 	]
 	start_response(status, response_headers)
 	return ()
+
+
+if __name__ == '__main__':
+	from werkzeug.serving import run_simple
+	
+	run_simple('localhost', 8000, app)

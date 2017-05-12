@@ -2,7 +2,7 @@ import dns.exception
 import dns.resolver
 
 
-resolver = dns.resolver.Resolver()
+resolver = dns.resolver.Resolver('./resolv.conf')
 resolver.lifetime = 0.500
 
 
